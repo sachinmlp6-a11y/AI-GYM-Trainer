@@ -175,6 +175,7 @@ def main():
         st.markdown("")
         st.success(f"🤖 **Coach:** {st.session_state.coach_feedback}")
 
+
     if not workout_started:
         st.markdown(
             """
@@ -197,11 +198,18 @@ def main():
             unsafe_allow_html=True,
         )
     else:
+        RTC_CONFIGURATION = {
+            "iceServers": [
+                {"urls": ["stun:stun.l.google.com:19302"]},
+                {"urls": ["stun:stun1.l.google.com:19302"]}
+            ]
+        }
+
         context = webrtc_streamer(
             key="exercise-analysis",
             mode=WebRtcMode.SENDRECV,
             video_processor_factory=VideoProcessorClass,
-            rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
+            rtc_configuration=RTC_CONFIGURATION,
             media_stream_constraints={
                 "video": True,
                 "audio": False
@@ -216,6 +224,7 @@ def main():
             st.rerun()
 
         inject_webrtc_styles()
+
 
     st.divider()
 
